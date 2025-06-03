@@ -1,4 +1,6 @@
+# HTML 문자열 내부 들여쓰기 문제를 해결하여 코드 재생성
 
+modified_code = """
 import pandas as pd
 from datetime import datetime, timedelta
 import smtplib
@@ -19,32 +21,54 @@ target_start = today + timedelta(days=30)
 target_end = today + timedelta(days=70)
 df_notify = df[(df["만기일"] >= target_start) & (df["만기일"] <= target_end)]
 
-# 이메일 발송
+# 이메일 발송 (종합 요약 메일 방식)
 if not df_notify.empty:
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.starttls()
         smtp.login(EMAIL_ADDR, EMAIL_PASS)
+
+        rows_html = ""
         for _, row in df_notify.iterrows():
-            html_content = f"""<html>
+            rows_html += f\"\"\"
+<tr>
+  <td>{row['주소']}</td>
+  <td>{row['임차인']}</td>
+  <td>{row['보증금']:,} 원</td>
+  <td>{row['부동산']}</td>
+  <td>{row['만기일'].date()}</td>
+</tr>
+\"\"\"
+
+        html_content = f\"\"\"\
+<html>
   <body style="font-family: Arial, sans-serif; color: #333;">
-    <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
-      <h2 style="color: #2E86C1;">🏠 임대 계약 만기 알림</h2>
-      <p><strong>📍 주소:</strong> {row['주소']}</p>
-      <p><strong>👤 임차인:</strong> {row['임차인']}</p>
-      <p><strong>💰 보증금:</strong> {row['보증금']:,} 원</p>
-      <p><strong>🏢 부동산:</strong> {row['부동산']}</p>
-      <p><strong>🗓 만기일:</strong> {row['만기일'].date()}</p>
-      <hr style="margin: 20px 0;">
-      <p style="font-size: 0.9em; color: #888;">본 메일은 임대 관리 자동화 시스템에서 발송되었습니다.</p>
+    <div style="max-width: 800px; margin: auto; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
+      <h2 style="color: #2E86C1;">🏠 임대 계약 만기 알림 ({len(df_notify)}건)</h2>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+        <tr style="background-color: #f2f2f2;">
+          <th>주소</th><th>임차인</th><th>보증금</th><th>부동산</th><th>만기일</th>
+        </tr>
+        {rows_html}
+      </table>
+      <p style="font-size: 0.9em; color: #888; margin-top: 20px;">본 메일은 임대 관리 자동화 시스템에서 발송되었습니다.</p>
     </div>
   </body>
 </html>
-"""
-            msg = MIMEText(html_content, "html")
-            msg["Subject"] = f"[알림] 임대 만기 예정 - {row['주소']} ({row['만기일'].date()})"
-            msg["From"] = EMAIL_ADDR
-            msg["To"] = EMAIL_ADDR  # 또는 row['임차인 이메일']
+\"\"\"
 
-            smtp.send_message(msg)
+        msg = MIMEText(html_content, "html")
+        msg["Subject"] = f"[알림] 임대 만기 예정 계약 {len(df_notify)}건"
+        msg["From"] = EMAIL_ADDR
+        msg["To"] = EMAIL_ADDR
+
+        smtp.send_message(msg)
 else:
     print("알림 대상 계약 없음.")
+"""
+
+# 저장
+file_path = "/mnt/data/send_reminder_summary.py"
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(modified_code)
+
+file_path
