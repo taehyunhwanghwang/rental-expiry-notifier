@@ -15,8 +15,8 @@ df["만기일"] = pd.to_datetime(df["만기일"])
 
 # 오늘 기준 30~70일 이내 만기 필터링
 today = datetime.today()
-target_start = today + timedelta(days=30)
-target_end = today + timedelta(days=70)
+target_start = today + timedelta(days=15)
+target_end = today + timedelta(days=90)
 df_notify = df[(df["만기일"] >= target_start) & (df["만기일"] <= target_end)]
 
 # 이메일 발송 (종합 요약 메일 방식)
