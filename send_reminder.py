@@ -67,7 +67,7 @@ else:
 """
 
 # 저장
-file_path = "/mnt/data/send_reminder_summary.py"
+file_path = "/mnt/data/send_reminder.py"
 with open(file_path, "w", encoding="utf-8") as f:
     f.write(modified_code)
 
