@@ -1,0 +1,27 @@
+name: Daily Rental Expiry Email
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 매일 00:00 UTC (한국시간 09:00)에 실행
+  workflow_dispatch:
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Send Email Reminders
+      env:
+        EMAIL_ADDR: ${{ secrets.EMAIL_ADDR }}
+        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      run: python send_reminder.py
