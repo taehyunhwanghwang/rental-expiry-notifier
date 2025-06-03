@@ -21,7 +21,7 @@ df_notify = df[(df["만기일"] >= target_start) & (df["만기일"] <= target_en
 
 # 이메일 발송
 if not df_notify.empty:
-    with smtpllib.SMTP("smtp.gmail.com", 587) as smtp:
+    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.starttls()
         smtp.login(EMAIL_ADDR, EMAIL_PASS)
         for _, row in df_notify.iterrows():
