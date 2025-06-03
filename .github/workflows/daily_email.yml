@@ -25,4 +25,4 @@ jobs:
       env:
         EMAIL_ADDR: ${{ secrets.EMAIL_ADDR }}
         EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-      run: python send_reminder.py
+      run: python send_reminder_summary.py
